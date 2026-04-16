@@ -1,0 +1,27 @@
+version: 1
+provider_address: "${PROVIDER_ADDRESS}"
+
+proxy:
+  target: "http://localhost:3000"
+
+routes:
+  - path: "/api/quote/premium"
+    method: "GET"
+    price: "0.01"
+    settlement: "tab"
+    description: "Random premium quote"
+
+  - path: "/api/report"
+    method: "POST"
+    price: "2.00"
+    settlement: "direct"
+    description: "Generate a report on a topic"
+
+  - path: "/health"
+    free: true
+
+  - path: "/api/quote/free"
+    free: true
+
+default_action: "block"
+fail_mode: "closed"

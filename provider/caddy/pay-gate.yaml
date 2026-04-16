@@ -1,0 +1,17 @@
+version: 1
+provider_address: "${PROVIDER_ADDRESS}"
+proxy:
+  target: "http://origin:3000"
+routes:
+  - path: "/api/quote/premium"
+    price: "0.01"
+    settlement: "tab"
+  - path: "/api/report"
+    method: "POST"
+    price: "2.00"
+    settlement: "direct"
+  - path: "/health"
+    free: true
+  - path: "/api/quote/free"
+    free: true
+default_action: "block"

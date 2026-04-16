@@ -1,0 +1,27 @@
+services:
+  origin:
+    build: ../../origin
+    expose: ["3000"]
+
+  gate:
+    image: ghcr.io/pay-skill/gate:latest
+    expose: ["8402"]
+    volumes: ["./pay-gate.yaml:/etc/pay-gate/pay-gate.yaml:ro"]
+    environment:
+      PROVIDER_ADDRESS: "${PROVIDER_ADDRESS}"
+    command: ["pay-gate", "start", "--config", "/etc/pay-gate/pay-gate.yaml"]
+    depends_on: [origin]
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.gate.rule=PathPrefix(`/`)"
+      - "traefik.http.services.gate.loadbalancer.server.port=8402"
+
+  traefik:
+    image: traefik:v3.0
+    ports: ["80:80"]
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"

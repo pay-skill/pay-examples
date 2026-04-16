@@ -1,0 +1,12 @@
+{
+  "name": "example-origin",
+  "version": "1.0.0",
+  "description": "Trivial quotes API used as the origin server in all pay-examples",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

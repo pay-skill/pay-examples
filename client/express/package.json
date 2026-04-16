@@ -1,0 +1,11 @@
+{
+  "name": "client-express",
+  "type": "module",
+  "scripts": { "start": "node --import tsx index.ts" },
+  "dependencies": {
+    "@pay-skill/express": "^0.1.1",
+    "@pay-skill/sdk": "^0.2.3",
+    "express": "^5.1.0"
+  },
+  "devDependencies": { "tsx": "^4.0.0", "@types/express": "^5.0.6" }
+}

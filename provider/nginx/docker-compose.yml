@@ -1,0 +1,19 @@
+services:
+  origin:
+    build: ../../origin
+    expose: ["3000"]
+
+  gate:
+    image: ghcr.io/pay-skill/gate:latest
+    expose: ["8402"]
+    volumes: ["./pay-gate.yaml:/etc/pay-gate/pay-gate.yaml:ro"]
+    environment:
+      PROVIDER_ADDRESS: "${PROVIDER_ADDRESS}"
+    command: ["pay-gate", "start", "--config", "/etc/pay-gate/pay-gate.yaml"]
+    depends_on: [origin]
+
+  nginx:
+    image: nginx:alpine
+    ports: ["80:80"]
+    volumes: ["./nginx.conf:/etc/nginx/conf.d/default.conf:ro"]
+    depends_on: [gate]

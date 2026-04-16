@@ -1,0 +1,13 @@
+name = "pay-gate-example"
+main = "src/index.ts"
+compatibility_date = "2026-04-01"
+
+[vars]
+PROVIDER_ADDRESS = ""  # Set via wrangler secret or dashboard
+PROXY_TARGET = "https://your-origin.example.com"
+DEFAULT_ACTION = "block"
+FAIL_MODE = "closed"
+
+[[kv_namespaces]]
+binding = "ROUTES"
+id = ""  # Created via: wrangler kv namespace create ROUTES
