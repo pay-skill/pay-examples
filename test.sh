@@ -17,10 +17,26 @@ echo "=== Testing $EXAMPLE ==="
 PROVIDER_ADDRESS="0x1234567890123456789012345678901234567890" \
   docker compose up -d --build --wait 2>&1
 
-# Determine the public port (gate or proxy frontend)
-PORT=$(docker compose port "$(docker compose config --services | grep -v origin | head -1)" 8402 2>/dev/null | cut -d: -f2 || \
-       docker compose port "$(docker compose config --services | grep -v origin | grep -v gate | head -1)" 80 2>/dev/null | cut -d: -f2 || \
-       echo "8402")
+# Determine the public port. Walk services (skipping origin) and try the
+# common container ports; first non-empty host mapping wins. Plain exit-code
+# checks don't work here — `docker compose port` prints nothing and exits 0
+# when the container port isn't published, so we test for a non-empty result.
+PORT=""
+for SERVICE in $(docker compose config --services); do
+  [ "$SERVICE" = "origin" ] && continue
+  for CPORT in 8402 80; do
+    HOSTPORT=$(docker compose port "$SERVICE" "$CPORT" 2>/dev/null | cut -d: -f2 || true)
+    if [ -n "$HOSTPORT" ]; then
+      PORT="$HOSTPORT"
+      break 2
+    fi
+  done
+done
+if [ -z "$PORT" ]; then
+  echo "FAIL: could not find a published port on any non-origin service"
+  docker compose ps
+  exit 1
+fi
 
 BASE="http://localhost:${PORT}"
 

@@ -2,7 +2,7 @@ version: 1
 provider_address: "${PROVIDER_ADDRESS}"
 
 proxy:
-  target: "http://localhost:3000"
+  target: "http://origin:3000"
 
 routes:
   - path: "/api/quote/premium"
