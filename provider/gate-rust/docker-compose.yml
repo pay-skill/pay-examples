@@ -9,5 +9,5 @@ services:
     volumes: ["./pay-gate.yaml:/etc/pay-gate/pay-gate.yaml:ro"]
     environment:
       PROVIDER_ADDRESS: "${PROVIDER_ADDRESS}"
-    command: ["pay-gate", "start", "--config", "/etc/pay-gate/pay-gate.yaml", "--port", "8402"]
+    command: ["start", "--config", "/etc/pay-gate/pay-gate.yaml", "--port", "8402"]
     depends_on: [origin]
