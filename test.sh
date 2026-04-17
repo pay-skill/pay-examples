@@ -26,7 +26,9 @@ for SERVICE in $(docker compose config --services); do
   [ "$SERVICE" = "origin" ] && continue
   for CPORT in 8402 80; do
     HOSTPORT=$(docker compose port "$SERVICE" "$CPORT" 2>/dev/null | cut -d: -f2 || true)
-    if [ -n "$HOSTPORT" ]; then
+    # docker compose prints ":0" for a container port that's exposed but
+    # not actually published, so treat 0 / empty as "no match".
+    if [ -n "$HOSTPORT" ] && [ "$HOSTPORT" != "0" ]; then
       PORT="$HOSTPORT"
       break 2
     fi
